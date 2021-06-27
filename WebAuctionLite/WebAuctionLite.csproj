@@ -11,14 +11,9 @@
     <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\Repositories\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Models\" />
     <Folder Include="Service\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Services\" />
-    <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\images\" />
-    <Folder Include="wwwroot\sass\" />
-    <Folder Include="wwwroot\webfonts\" />
   </ItemGroup>
 
 </Project>
