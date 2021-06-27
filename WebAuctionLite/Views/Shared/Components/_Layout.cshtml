@@ -1,9 +1,8 @@
 ﻿<!DOCTYPE HTML>
-
 <html>
 <head>
 </head>
-    @await Html.PartialAsync("MetatagPartial")
+    @await Html.PartialAsync("MetatagsPartial")
     @await Html.PartialAsync("CssPartial")
 <body>
     <div id="page-wrapper">
@@ -21,7 +20,7 @@
 
                     </div>
                 </div>
-                @@await Html.PartialAsync("SidebarPartial")
+                @await Html.PartialAsync("SidebarPartial")
             </div>
         </div>
 
@@ -31,6 +30,6 @@
     </div>
 
     <!-- Scripts -->
-
+    @await Html.PartialAsync("ScriptsPartial")
 </body>
 </html>
