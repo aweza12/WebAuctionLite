@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -17,12 +17,10 @@
     <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Areas\User\" />
-    <Folder Include="Domain\Entities\" />
-    <Folder Include="Domain\Repositories\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Service\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Services\" />
+    <Folder Include="Views\Shared\Components\" />
   </ItemGroup>
 
   <ItemGroup>
