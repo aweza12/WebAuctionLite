@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using MyCompany.Domain.Entities;
-using MyCompany.Domain.Repositories.Abstract;
+using WebAuctionLite.Domain.Entities;
+using WebAuctionLite.Domain.Repositories.Abstract;
 
-namespace MyCompany.Domain.Repositories.EntityFramework
+namespace WebAuctionLite.Domain.Repositories.EntityFramework
 {
     public class EFTextFieldsRepository : ITextFieldsRepository
     {
