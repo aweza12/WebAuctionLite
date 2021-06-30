@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebAuctionLite.Domain;
 
-namespace WebAuctionLite.Controllers
+namespace WebAuctionLite.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class HomeController : Controller
     {
         private readonly DataManager dataManager;
@@ -14,12 +15,7 @@ namespace WebAuctionLite.Controllers
 
         public IActionResult Index()
         {
-            return View(dataManager.TextFields.GetTextFieldByCodeWord("PageIndex"));
-        }
-
-        public IActionResult Contacts()
-        {
-            return View(dataManager.TextFields.GetTextFieldByCodeWord("PageContacts"));
+            return View(dataManager.ServiceItems.GetServiceItems());
         }
     }
 }
