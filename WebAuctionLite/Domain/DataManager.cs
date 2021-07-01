@@ -12,14 +12,16 @@ namespace WebAuctionLite.Domain
         public ILotsRepository Lots { get; set; }
         public IBidsRepository Bids { get; set; }
         public IProductsRepository Products { get; set; }
+        public IApplicationUserRepository ApplicationUsers { get; set; }
 
-        public DataManager(ITextFieldsRepository textFieldsRepository, IServiceItemsRepository serviceItemsRepository, ILotsRepository lotsRepository, IBidsRepository bidsRepository, IProductsRepository productsRepository)
+        public DataManager(ITextFieldsRepository textFieldsRepository, IServiceItemsRepository serviceItemsRepository, ILotsRepository lotsRepository, IBidsRepository bidsRepository, IProductsRepository productsRepository, IApplicationUserRepository applicationUserRepository)
         {
             TextFields = textFieldsRepository;
             ServiceItems = serviceItemsRepository;
             Lots = lotsRepository;
             Bids = bidsRepository;
             Products = productsRepository;
+            ApplicationUsers = applicationUserRepository;
         }
     }
 }

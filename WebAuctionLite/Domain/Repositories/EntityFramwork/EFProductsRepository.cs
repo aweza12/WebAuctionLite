@@ -7,7 +7,7 @@ using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Domain.Repositories.Abstract;
 using WebAuctionLite.Entities;
 
-namespace WebAuctionLite.Domain.Repositories.EntityFramwork
+namespace WebAuctionLite.Domain.Repositories.EntityFramework
 {
     public class EFProductsRepository : IProductsRepository
     {

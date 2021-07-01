@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using WebAuctionLite.Domain;
 using WebAuctionLite.Domain.Repositories.Abstract;
 using WebAuctionLite.Domain.Repositories.EntityFramework;
-using WebAuctionLite.Domain.Repositories.EntityFreamwork;
+
 using WebAuctionLite.Service;
 
 namespace WebAuctionLite
@@ -40,6 +40,7 @@ namespace WebAuctionLite
             services.AddTransient<ILotsRepository, EFLotsRepository>();
             services.AddTransient<IBidsRepository, EFBidsRepository>();
             services.AddTransient<IProductsRepository, EFProductsRepository>();
+            services.AddTransient<IApplicationUserRepository, EFApplicationUserRepository>();
             services.AddTransient<DataManager>();
 
             //подключаем контекст БД
