@@ -7,7 +7,7 @@ using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Domain.Repositories.Abstract;
 using WebAuctionLite.Entities;
 
-namespace WebAuctionLite.Domain.Repositories.EntityFreamwork
+namespace WebAuctionLite.Domain.Repositories.EntityFramwork
 {
     public class EFApplicationUserRepository : IApplicationUserRepository
     {

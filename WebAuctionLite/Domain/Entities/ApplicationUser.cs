@@ -23,5 +23,6 @@ namespace WebAuctionLite.Domain.Entities
 
         public ICollection<Bid> Bids { get; set; }
         public ICollection<Product> Products { get; set; }
+        public ICollection<Lot> Lots { get; set; }
     }
 }

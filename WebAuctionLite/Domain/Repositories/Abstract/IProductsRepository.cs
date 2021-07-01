@@ -8,8 +8,7 @@ namespace WebAuctionLite.Domain.Repositories.Abstract
     {
         IQueryable<Product> GetProducts();
         Product GetProductById(Guid id);
-        Product GetProductByLotId(Guid id);
-        IQueryable<Product> GetProductByUserId(Guid id);
+        IQueryable<Product> GetProductsByUserId(Guid id);
         void SaveProduct(Product entity);
         void DeleteProduct(Guid id);
     }

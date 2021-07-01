@@ -7,37 +7,32 @@ using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Domain.Repositories.Abstract;
 using WebAuctionLite.Entities;
 
-namespace WebAuctionLite.Domain.Repositories.EntityFreamwork
+namespace WebAuctionLite.Domain.Repositories.EntityFramwork
 {
-    public class EFBidsRepository : IBidsRepository
+    public class EFProductsRepository : IProductsRepository
     {
         private readonly AppDbContext context;
-        public EFBidsRepository(AppDbContext context)
+        public EFProductsRepository(AppDbContext context)
         {
             this.context = context;
         }
 
-        public IQueryable<Bid> GetBids()
+        public IQueryable<Product> GetProducts()
         {
-            return context.Bids;
+            return context.Products;
         }
 
-        public Bid GetBidById(Guid id)
+        public Product GetProductById(Guid id)
         {
-            return context.Bids.FirstOrDefault(x => x.Id == id);
+            return context.Products.FirstOrDefault(x => x.Id == id);
         }
 
-        public Bid GetBidsByLotId(Guid id)
+        public IQueryable<Product> GetProductsByUserId(Guid id)
         {
-            return context.Bids.FirstOrDefault(x => x.Lot.Id == id);
+            return context.Products.Where(x => x.ApplicationUser.Id == id);
         }
 
-        public Bid GetBidsByUserId(Guid id)
-        {
-            return context.Bids.FirstOrDefault(x => x.ApplicationUser.Id == id);
-        }
-
-        public void SaveBid(Bid entity)
+        public void SaveProduct(Product entity)
         {
             if (entity.Id == default)
                 context.Entry(entity).State = EntityState.Added;
@@ -46,9 +41,9 @@ namespace WebAuctionLite.Domain.Repositories.EntityFreamwork
             context.SaveChanges();
         }
 
-        public void DeleteBid(Guid id)
+        public void DeleteProduct(Guid id)
         {
-            context.Bids.Remove(new Bid() { Id = id });
+            context.Products.Remove(new Product() { Id = id });
             context.SaveChanges();
         }
     }

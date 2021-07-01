@@ -29,5 +29,8 @@ namespace WebAuctionLite.Domain.Entities
         //public int BuyerId { get; set; }
         //public Buyer Buyer { get; set; }
         public LotStatus LotStatus { get; set; }
+
+        public Guid ApplicationUserId { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }
