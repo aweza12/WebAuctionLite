@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAuctionLite.Domain.Entities;
+using WebAuctionLite.Entities;
 
 namespace WebAuctionLite.Domain
 {
@@ -15,6 +16,10 @@ namespace WebAuctionLite.Domain
 
         public DbSet<TextField> TextFields { get; set; }
         public DbSet<ServiceItem> ServiceItems { get; set; }
+        public DbSet<Lot> Lots { get; set; }
+        public DbSet<Bid> Bids { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +30,13 @@ namespace WebAuctionLite.Domain
                 Id = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
                 Name = "admin",
                 NormalizedName = "ADMIN"
+            });
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = "44546e06-8719-4ad8-b88a-f271ae9d6eac",
+                Name = "user",
+                NormalizedName = "USER"
             });
 
             modelBuilder.Entity<IdentityUser>().HasData(new IdentityUser
@@ -39,10 +51,30 @@ namespace WebAuctionLite.Domain
                 SecurityStamp = string.Empty
             });
 
+            modelBuilder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = Guid.Parse("3b62472e-4f66-49fa-a20f-e7685b9565d9"),
+                UserName = "user001",
+                NormalizedUserName = "USER001",
+                Email = "user001@email.com",
+                NormalizedEmail = "USER001@EMAIL.COM",
+                EmailConfirmed = true,
+                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null, "userpass"),
+                SecurityStamp = string.Empty,
+                MoneyAccount = 0,
+
+            });
+
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
             {
                 RoleId = "44546e06-8719-4ad8-b88a-f271ae9d6eab",
                 UserId = "3b62472e-4f66-49fa-a20f-e7685b9565d8"
+            });
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            {
+                RoleId = "44546e06-8719-4ad8-b88a-f271ae9d6eac",
+                UserId = "3b62472e-4f66-49fa-a20f-e7685b9565d9"
             });
 
             modelBuilder.Entity<TextField>().HasData(new TextField

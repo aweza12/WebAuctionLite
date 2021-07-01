@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace WebAuctionLite.Service
 {
-    public class AdminAreaAuthorization : IControllerModelConvention
+    public class UserAreaAuthorization : IControllerModelConvention
     {
         private readonly string area;
         private readonly string policy;
 
-        public AdminAreaAuthorization(string area, string policy)
+        public UserAreaAuthorization(string area, string policy)
         {
             this.area = area;
             this.policy = policy;
