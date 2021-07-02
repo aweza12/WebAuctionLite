@@ -8,10 +8,10 @@
     <h2>@strTitle</h2>
     <div class="div-box">
         <h3>Редактировать страницы сайта</h3>
-        <a asp-area="Admin" asp-controller="TextFields" asp-action="Edit" asp-route-codeWord="PageIndex">Лоты</a>
-        <a asp-area="Admin" asp-controller="TextFields" asp-action="Edit" asp-route-codeWord="PageServices">Товары</a>
-        <a asp-area="Admin" asp-controller="TextFields" asp-action="Edit" asp-route-codeWord="PageContacts">Ставки</a>
-        <a asp-area="Admin" asp-controller="TextFields" asp-action="Edit" asp-route-codeWord="PageContacts">Настройки аккаунта</a>
+        <a asp-area="User" asp-controller="Lots" asp-action="Index" asp-route-codeWord="PageIndex">Лоты</a>
+        <a asp-area="User" asp-controller="Products" asp-action="Index" asp-route-codeWord="PageServices">Товары</a>
+        <a asp-area="User" asp-controller="Bids" asp-action="Index" asp-route-codeWord="PageContacts">Ставки</a>
+        <a asp-area="User" asp-controller="ApplictaionUser" asp-action="Index" asp-route-codeWord="PageContacts">Настройки аккаунта</a>
     </div>
     <div class="div-box">
         <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
