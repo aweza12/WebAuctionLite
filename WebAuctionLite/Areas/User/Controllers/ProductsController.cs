@@ -16,7 +16,7 @@ namespace WebAuctionLite.Areas.User.Controllers
     {
         private readonly DataManager dataManager;
         private readonly IWebHostEnvironment hostingEnvironment;
-        ClaimsPrincipal currentUser = this.User;
+        //ClaimsPrincipal currentUser = this.User;
 
         public ProductsController(DataManager dataManager, IWebHostEnvironment hostingEnvironment)
         {
