@@ -9,6 +9,21 @@
                         <a asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
                         <a asp-area="" asp-controller="Services" asp-action="Index" asp-route-id="">Наши услуги</a>
                         <a asp-area="" asp-controller="Home" asp-action="Contacts">Контакты</a>
+
+                        @{
+                            var isLogin = User.IsInRole("user");
+                        }
+                        @if (isLogin)
+                        {
+                            <a asp-area="" asp-controller="User">Личный кабинет</a>
+                        }
+                        @if (!isLogin)
+                        {
+                            <a asp-area="" asp-controller="Account" asp-action="Login">Войти</a>
+                            <a asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>
+                        }
+
+
                     </nav>
                 </header>
 

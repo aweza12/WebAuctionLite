@@ -1,36 +1,30 @@
-﻿using System;
-using System.IO;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using WebAuctionLite.Domain;
 using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Service;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebAuctionLite.Areas.User.Controllers
 {
     [Area("User")]
-    public class ProductsController : Controller
+    public class ApplicationUserController : Controller
     {
         private readonly DataManager dataManager;
         private readonly IWebHostEnvironment hostingEnvironment;
         private UserManager<IdentityUser> userManager;
 
-        public ProductsController(DataManager dataManager, IWebHostEnvironment hostingEnvironment, UserManager<IdentityUser> userManager)
+        public ApplicationUserController(DataManager dataManager, IWebHostEnvironment hostingEnvironment, UserManager<IdentityUser> userManager)
         {
             this.dataManager = dataManager;
             this.hostingEnvironment = hostingEnvironment;
             this.userManager = userManager;
-        }
-
-        public IActionResult Index()
-        {
-            var id = userManager.GetUserId(User);
-            return View(dataManager.Products.GetProducts().Where(x => x.ApplicationUserId.ToString() == id));
         }
 
         public IActionResult Edit(Guid id)
@@ -70,4 +64,6 @@ namespace WebAuctionLite.Areas.User.Controllers
             return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).CutController());
         }
     }
+
+}
 }
