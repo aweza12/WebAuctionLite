@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Models;
 
 namespace WebAuctionLite.Controllers
@@ -40,6 +41,40 @@ namespace WebAuctionLite.Controllers
                     }
                 }
                 ModelState.AddModelError(nameof(LoginViewModel.UserName), "Неверный логин или пароль");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName, Email = model.Email,  };
+                // добавляем пользователя
+                var result = await userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    // установка куки
+                    await signInManager.SignInAsync(user, false);
+                    await userManager.AddToRoleAsync(user, "user");
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
             return View(model);
         }

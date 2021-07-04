@@ -13,8 +13,19 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="DateAdded" />
             <input type="hidden" asp-for="TitleImagePath" />
-
             <div asp-validation-summary="All"></div>
+
+            <div class="div-box">
+                <label asp-for="Name">Имя</label>
+                <input asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div class="div-box">
+                <label asp-for="Description">Описание</label>
+                <textarea asp-for="Description"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+
             <div class="div-box">
                 <label asp-for="Title"></label>
                 <input asp-for="Title" />
@@ -52,6 +63,7 @@
                 <input asp-for="MetaKeywords" />
                 <span asp-validation-for="MetaKeywords"></span>
             </div>
+
             <input type="submit" value="Сохранить" />
         </form>
     </div>

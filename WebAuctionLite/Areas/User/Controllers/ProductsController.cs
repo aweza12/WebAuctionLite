@@ -1,19 +1,22 @@
 ﻿using System;
 using System.IO;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebAuctionLite.Domain;
 using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Service;
 
-namespace WebAuctionLite.Areas.Admin.Controllers
+namespace WebAuctionLite.Areas.User.Controllers
 {
     [Area("User")]
     public class ProductsController : Controller
     {
         private readonly DataManager dataManager;
         private readonly IWebHostEnvironment hostingEnvironment;
+        ClaimsPrincipal currentUser = this.User;
 
         public ProductsController(DataManager dataManager, IWebHostEnvironment hostingEnvironment)
         {
@@ -45,6 +48,7 @@ namespace WebAuctionLite.Areas.Admin.Controllers
                         titleImageFile.CopyTo(stream);
                     }
                 }
+                model.DateAdded = DateTime.UtcNow;
                 dataManager.Products.SaveProduct(model);
                 return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).CutController());
             }

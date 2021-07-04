@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Areas\User\Views\Products\Edit.cshtml" />
     <Content Remove="bundleconfig.json" />
     <Content Remove="compilerconfig.json" />
   </ItemGroup>
@@ -20,7 +19,6 @@
 
   <ItemGroup>
     <None Include="Areas\Admin\Views\ServiceItems\Edit.cshtml" />
-    <None Include="Areas\User\Views\Products\Edit.cshtml" />
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
     <None Include="Views\Services\Index.cshtml" />

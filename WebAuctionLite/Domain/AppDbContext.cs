@@ -95,6 +95,12 @@ namespace WebAuctionLite.Domain
                 CodeWord = "PageContacts",
                 Title = "Контакты"
             });
+            modelBuilder.Entity<TextField>().HasData(new TextField
+            {
+                Id = new Guid("4aa76a4c-c59d-409a-84c1-06e6487a137b"),
+                CodeWord = "PageLogin",
+                Title = "Login"
+            });
         }
     }
 }
