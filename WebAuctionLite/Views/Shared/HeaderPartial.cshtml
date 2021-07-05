@@ -10,14 +10,16 @@
                         <a asp-area="" asp-controller="Services" asp-action="Index" asp-route-id="">Наши услуги</a>
                         <a asp-area="" asp-controller="Home" asp-action="Contacts">Контакты</a>
 
-                        @{
-                            var isLogin = User.IsInRole("user");
-                        }
-                        @if (isLogin)
+
+                        @if (User.IsInRole("user"))
                         {
                             <a asp-area="" asp-controller="User">Личный кабинет</a>
                         }
-                        @if (!isLogin)
+                        else if (User.IsInRole("admin"))
+                        {
+                            <a asp-area="" asp-controller="Admin">Кабинет администратора</a>
+                        }
+                        else
                         {
                             <a asp-area="" asp-controller="Account" asp-action="Login">Войти</a>
                             <a asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>

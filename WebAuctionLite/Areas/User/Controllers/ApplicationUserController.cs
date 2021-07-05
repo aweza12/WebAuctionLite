@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAuctionLite.Areas.User.Models;
 using WebAuctionLite.Domain;
 using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Service;
@@ -19,7 +20,7 @@ namespace WebAuctionLite.Areas.User.Controllers
         private readonly DataManager dataManager;
         private readonly IWebHostEnvironment hostingEnvironment;
         private UserManager<IdentityUser> userManager;
-
+        
         public ApplicationUserController(DataManager dataManager, IWebHostEnvironment hostingEnvironment, UserManager<IdentityUser> userManager)
         {
             this.dataManager = dataManager;
@@ -27,34 +28,55 @@ namespace WebAuctionLite.Areas.User.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult Edit(Guid id)
-        {
-            var entity = id == default ? new Product() : dataManager.Products.GetProductById(id);
+        public IActionResult Index() => View();
 
-            return View(entity);
+        public async Task<IActionResult> Edit()
+        {
+            ApplicationUser user = (ApplicationUser)userManager.FindByIdAsync(userManager.GetUserId(User)).Result;
+            if (user == null)
+            {
+                return NotFound();
+            }
+            //ApplicationUserViewModel model = new ApplicationUserViewModel { FirstName = user.FirstName, LastName = user.LastName, UserName = user.UserName, Email = user.Email, };
+            ApplicationUser model = user;
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Edit(Product model, IFormFile titleImageFile)
+        public async Task<IActionResult> Edit(ApplicationUser model)
         {
+            //if (ModelState.IsValid)
+            //{
+            //    ApplicationUser user = (ApplicationUser)await userManager.FindByNameAsync(model.UserName);
+            //    if (user != null)
+            //    {
+            //        user.Email = model.Email;
+            //        user.UserName = model.Email;
+            //        user.FirstName = model.FirstName;
+            //        user.LastName = model.LastName;
+            //        user.UserName = model.UserName;
+
+            //        dataManager.ApplicationUsers.SaveApplicationUser(user);
+            //        return RedirectToAction("Index");
+            //    }
+            //}
             if (ModelState.IsValid)
             {
-                if (titleImageFile != null)
+                ApplicationUser user = (ApplicationUser)userManager.FindByIdAsync(userManager.GetUserId(User)).Result;
+                if (model != null)
                 {
-                    model.TitleImagePath = titleImageFile.FileName;
-                    using (var stream = new FileStream(Path.Combine(hostingEnvironment.WebRootPath, "images/", titleImageFile.FileName), FileMode.Create))
-                    {
-                        titleImageFile.CopyTo(stream);
-                    }
-                }
-                model.DateAdded = DateTime.UtcNow;
-                model.ApplicationUserId = new Guid(userManager.GetUserId(User));
-                model.ApplicationUser = (ApplicationUser)userManager.FindByIdAsync(userManager.GetUserId(User)).Result;
+                    user.Email = model.Email;
+                    user.UserName = model.Email;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.UserName = model.UserName;
 
-                dataManager.Products.SaveProduct(model);
-                return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).CutController());
+                    //dataManager.ApplicationUsers. .SaveApplicationUser(user);
+                    await userManager.UpdateAsync(user);
+                    return RedirectToAction("Index");
+                }
             }
-            return View(model);
+            return View();
         }
 
         [HttpPost]
@@ -66,4 +88,4 @@ namespace WebAuctionLite.Areas.User.Controllers
     }
 
 }
-}
+
