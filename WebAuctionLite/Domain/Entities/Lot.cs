@@ -10,6 +10,13 @@ namespace WebAuctionLite.Domain.Entities
 {
     public class Lot : BaseEntity
     {
+        public Lot()
+        {
+            StartDate = DateTime.UtcNow;
+            MinBetMove = 5;
+            LotStatus = LotStatus.Active;
+        }
+
         [DataType(DataType.Time)]
         public DateTime StartDate { get; set; }
 
