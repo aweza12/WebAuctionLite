@@ -26,8 +26,9 @@
                 <span asp-validation-for="MinBetMove"></span>
             </div>
             <div class="div-box">
+                <p>@Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T").Remove(Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T").Length - 3)</p>
                 <label asp-for="EndDate">EndDate</label>
-                <input type="datetime-local" max=@Model.StartDate.AddDays(30).ToString() min=@Model.StartDate.ToString() asp-for="EndDate"></input>
+                <input type="datetime-local" max="@Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T")" min="@Model.StartDate.ToString().Replace(".", "-").Replace(" ", "T").Remove(Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T").Length - 3)" value="@Model.StartDate.ToString().Replace(".", "-").Replace(" ", "T").Remove(Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T").Length - 3)" asp-for="EndDate"></input>
                 <span asp-validation-for="EndDate"></span>
             </div>
             <div class="div-box">

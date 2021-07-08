@@ -27,6 +27,11 @@ namespace WebAuctionLite.Domain.Repositories.EntityFramework
             return context.Lots.FirstOrDefault(x => x.Id == id);
         }
 
+        public Lot GetLotByProductId(Guid id)
+        {
+            return context.Lots.FirstOrDefault(x => x.ProductId == id);
+        }
+
         public IQueryable<Lot> GetLotsByUserId(Guid id)
         {
             return context.Lots.Where(x => x.ApplicationUser.Id == id);

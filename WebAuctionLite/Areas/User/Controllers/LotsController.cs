@@ -44,6 +44,25 @@ namespace WebAuctionLite.Areas.User.Controllers
         [HttpPost]
         public IActionResult Edit(Lot model, IFormFile titleImageFile)
         {
+            var id = userManager.GetUserId(User);
+
+            if (model.EndDate.CompareTo(model.StartDate) < 1)
+            {
+                ModelState.AddModelError("StartDate", "Дата окончания меньше или равна дате начала аукциона");
+            }
+            if (model.MinBetMove < 5)
+            {
+                ModelState.AddModelError("MinBetMove", "Ход аукциона не может быть меньше 5");
+            }
+            if (dataManager.Products.GetProducts().Where(x => x.ApplicationUserId.ToString() == id).Where(x => x.Id == model.ProductId) == null)
+            {
+                ModelState.AddModelError("ProductId", "Такого товара не существует в вашем списке");
+            }
+            else if (dataManager.Lots.GetLotByProductId(model.ProductId) != null)
+            {
+                ModelState.AddModelError("ProductId", "Товар уже был выставлен в другом лоте");
+            }
+
             if (ModelState.IsValid)
             {
                 if (titleImageFile != null)
