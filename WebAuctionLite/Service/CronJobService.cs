@@ -58,7 +58,7 @@ public abstract class CronJobService : IHostedService, IDisposable
 
     public virtual async Task DoWork(CancellationToken cancellationToken)
     {
-        await dataManager.Lots.Where(x => x.);
+        
         await Task.CompletedTask;  // do the work
     }
 

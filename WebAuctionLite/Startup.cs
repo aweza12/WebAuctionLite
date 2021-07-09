@@ -16,6 +16,7 @@ using WebAuctionLite.Domain.Repositories.Abstract;
 using WebAuctionLite.Domain.Repositories.EntityFramework;
 
 using WebAuctionLite.Service;
+using WebAuctionLite.Service.Jobs;
 
 namespace WebAuctionLite
 {
@@ -42,9 +43,16 @@ namespace WebAuctionLite
             services.AddTransient<IProductsRepository, EFProductsRepository>();
             services.AddTransient<IApplicationUserRepository, EFApplicationUserRepository>();
             services.AddTransient<DataManager>();
-
+            
             //подключаем контекст БД
             services.AddDbContext<AppDbContext>(x => x.UseSqlServer(Config.ConnectionString));
+
+            services.AddCronJob<LotsCronJob>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"* * * * *";
+                c.dataManager = 
+            });
 
             //настраиваем identity систему
             services.AddIdentity<IdentityUser, IdentityRole>(opts =>

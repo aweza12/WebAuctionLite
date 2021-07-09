@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Domain.Repositories.Abstract;
 using WebAuctionLite.Entities;
+using WebAuctionLite.Entities.Enums;
 
 namespace WebAuctionLite.Domain.Repositories.EntityFramework
 {
@@ -35,6 +36,16 @@ namespace WebAuctionLite.Domain.Repositories.EntityFramework
         public IQueryable<Lot> GetLotsByUserId(Guid id)
         {
             return context.Lots.Where(x => x.ApplicationUser.Id == id);
+        }
+
+        public IQueryable<Lot> GetLotsByEndDateTime(DateTime dateTime)
+        {
+            return context.Lots.Where(x => x.EndDate == dateTime);
+        }
+
+        public void ChangeStatus(Lot entity, LotStatus lotStatus)
+        {
+            entity.LotStatus = lotStatus;
         }
 
         public void SaveLot(Lot entity)
