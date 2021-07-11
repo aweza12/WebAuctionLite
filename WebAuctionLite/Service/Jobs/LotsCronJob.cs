@@ -22,12 +22,6 @@ namespace WebAuctionLite.Service.Jobs
             this.scopeFactory = scopeFactory;
         }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Lots starts.");
-            return base.StartAsync(cancellationToken);
-        }
-
         public override Task DoWork(CancellationToken cancellationToken)
         {
             _logger.LogInformation($"{DateTime.Now:hh:mm:ss} Lots is working.");
@@ -45,12 +39,6 @@ namespace WebAuctionLite.Service.Jobs
             }
 
             return Task.CompletedTask;
-        }
-
-        public override Task StopAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Lots is stopping.");
-            return base.StopAsync(cancellationToken);
         }
     }
 }
