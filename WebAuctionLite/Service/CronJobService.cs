@@ -5,19 +5,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebAuctionLite.Domain;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 public abstract class CronJobService : IHostedService, IDisposable
 {
     private System.Timers.Timer _timer;
     private readonly CronExpression _expression;
     private readonly TimeZoneInfo _timeZoneInfo;
-    private readonly DataManager dataManager;
+    private readonly IServiceScopeFactory scopeFactory;
 
-    protected CronJobService(string cronExpression, TimeZoneInfo timeZoneInfo, DataManager dataManager)
+
+    protected CronJobService(string cronExpression, TimeZoneInfo timeZoneInfo, IServiceScopeFactory scopeFactory)
     {
         _expression = CronExpression.Parse(cronExpression);
         _timeZoneInfo = timeZoneInfo;
-        this.dataManager = dataManager;
+
+        this.scopeFactory = scopeFactory;
     }
 
     public virtual async Task StartAsync(CancellationToken cancellationToken)
@@ -58,8 +62,8 @@ public abstract class CronJobService : IHostedService, IDisposable
 
     public virtual async Task DoWork(CancellationToken cancellationToken)
     {
-        
-        await Task.CompletedTask;  // do the work
+
+        await Task.Delay(5000, cancellationToken);  // do the work
     }
 
     public virtual async Task StopAsync(CancellationToken cancellationToken)

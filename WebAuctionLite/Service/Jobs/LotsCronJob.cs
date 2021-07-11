@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +13,13 @@ namespace WebAuctionLite.Service.Jobs
     public class LotsCronJob : CronJobService
     {
         private readonly ILogger<LotsCronJob> _logger;
-        private readonly DataManager dataManager;
+        private readonly IServiceScopeFactory scopeFactory;
 
-        public LotsCronJob(IScheduleConfig<LotsCronJob> config, ILogger<LotsCronJob> logger, DataManager dataManager)
-            : base(config.CronExpression, config.TimeZoneInfo, config.dataManager)
+        public LotsCronJob(IScheduleConfig<LotsCronJob> config, ILogger<LotsCronJob> logger, IServiceScopeFactory scopeFactory)
+            : base(config.CronExpression, config.TimeZoneInfo, scopeFactory)
         {
             _logger = logger;
-            this.dataManager = dataManager;
+            this.scopeFactory = scopeFactory;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
@@ -29,10 +31,19 @@ namespace WebAuctionLite.Service.Jobs
         public override Task DoWork(CancellationToken cancellationToken)
         {
             _logger.LogInformation($"{DateTime.Now:hh:mm:ss} Lots is working.");
-            foreach (var l in dataManager.Lots.GetLotsByEndDateTime(DateTime.UtcNow))
+
+            using (var scope = scopeFactory.CreateScope())
             {
-                dataManager.Lots.ChangeStatus(l, WebAuctionLite.Entities.Enums.LotStatus.Completed);
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                foreach (var l in dbContext.Lots.Where(x => x.EndDate <= DateTime.UtcNow && x.LotStatus == Entities.Enums.LotStatus.Active))
+                {
+                    l.LotStatus = Entities.Enums.LotStatus.Completed;
+                }
+
+                dbContext.SaveChanges();
             }
+
             return Task.CompletedTask;
         }
 

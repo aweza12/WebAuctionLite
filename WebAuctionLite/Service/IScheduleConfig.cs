@@ -8,8 +8,6 @@ namespace WebAuctionLite.Service
 {
     public interface IScheduleConfig<T>
     {
-        //private readonly DataManager dataManager;
-        DataManager dataManager { get; set; }
         string CronExpression { get; set; }
         TimeZoneInfo TimeZoneInfo { get; set; }
     }
