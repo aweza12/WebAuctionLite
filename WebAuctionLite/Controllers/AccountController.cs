@@ -57,7 +57,7 @@ namespace WebAuctionLite.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName, Email = model.Email,  };
+                ApplicationUser user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName, Email = model.Email, MoneyAccount = 0 };
                 // добавляем пользователя
                 var result = await userManager.CreateAsync(user, model.Password);
 

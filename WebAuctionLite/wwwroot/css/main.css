@@ -1203,3 +1203,7 @@ ul.link-list li {
   display: block;
   max-width: 100%;
   margin: 0 auto; }
+
+.product-card {
+    border: 2px dashed black;
+}

@@ -69,6 +69,10 @@ namespace WebAuctionLite.Areas.User.Controllers
 
             if (ModelState.IsValid)
             {
+                model.DateAdded = DateTime.UtcNow;
+                //model.StartDate = DateTime.UtcNow;
+                model.Product = dataManager.Products.GetProductById(model.ProductId);
+
                 if (model.Product.TitleImagePath != null)
                 {
                     model.TitleImagePath = model.Product.TitleImagePath;
@@ -78,9 +82,6 @@ namespace WebAuctionLite.Areas.User.Controllers
                     }
                 }
 
-                model.DateAdded = DateTime.UtcNow;
-                //model.StartDate = DateTime.UtcNow;
-                model.Product = dataManager.Products.GetProductById(model.ProductId);
                 //model.LotStatus = Entities.Enums.LotStatus.Active;
 
                 model.ApplicationUserId = new Guid(userManager.GetUserId(User));

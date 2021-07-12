@@ -110,6 +110,17 @@ namespace WebAuctionLite.Areas.User.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> AddMoney()
+        {
+            ApplicationUser user = (ApplicationUser)userManager.FindByIdAsync(userManager.GetUserId(User)).Result;
+            //ApplicationUser user = (ApplicationUser)userManager.FindByIdAsync(userManager.GetUserId(User)).Result;
+            user.MoneyAccount += Convert.ToDecimal(100);
+            await userManager.UpdateAsync(user);
+
+            return new RedirectResult("/User");
+        }
+
         [HttpPost]
         public IActionResult Delete(Guid id)
         {

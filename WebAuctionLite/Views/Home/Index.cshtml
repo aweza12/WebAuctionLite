@@ -15,10 +15,10 @@
             <div>
                 @foreach (Lot entity in Model)
                 {
-                    <div>
-                        <li>
+                    <div class="product-card" style="height: 250px; border: 2px dashed black; margin-bottom: 20px">
+                        @*<li>*@
                             <a asp-area="" asp-controller="Services" asp-action="Index" asp-route-id="@entity.Id">
-                                <img src="~/images/@entity.TitleImagePath" alt="" class="left" />
+                                <img src="~/images/@entity.TitleImagePath" alt="" class="left" height="200px" width="200px" />
                             </a>
                             <h4>
                                 @entity.Title
@@ -32,7 +32,7 @@
                             <p>
                                 Лот активен до @entity.EndDate
                             </p>
-                        </li>
+                        @*</li>*@
                     </div>
                  }
             </div>
