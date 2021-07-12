@@ -4,7 +4,7 @@
     ViewBag.Title = strTitle;
 }
 
-<div>
+<div onload="time()">
     <div>
         <h3>Актуальные лоты</h3>
         @*<div class="div-box">
@@ -21,7 +21,7 @@
                                 <img src="~/images/@entity.TitleImagePath" alt="" class="left" />
                             </a>
                             <h4>
-                                @*@entity.Product.Name*@
+                                @entity.Title
                             </h4>
                             <h4>
                                 @entity.MinPrice
@@ -29,47 +29,13 @@
                             <h4>
                                 @entity.MinBetMove
                             </h4>
-                            <p class="timer"></p>
+                            <p>
+                                Лот активен до @entity.EndDate
+                            </p>
                         </li>
                     </div>
-                }
+                 }
             </div>
         }
     </div>
-
-    <script>
-        // Set the date we're counting down to
-        var countDownDate = new Date("@DateTime.UtcNow.ToString()").getTime();
-
-        // Update the count down every 1 second
-        var x = setInterval(function () {
-
-            // Get todays date and time
-            var now = new Date().getTime();
-
-            // Find the distance between now an the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Display the result in the element with id="demo"
-            var k = document.getElementsByClassName("timer");
-            for (var i = 0; i < x.length; i++) {
-                k[i].innerHTML = days + "д. " + hours + "ч. "
-                    + minutes + "м. " + seconds + "с. ";    // Change the content
-
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementsByClassName("timer").innerHTML = "Закончен";
-                }
-            }
-
-            // If the count down is finished, write some text
-            
-        }, 1000);
-    </script>
 </div>

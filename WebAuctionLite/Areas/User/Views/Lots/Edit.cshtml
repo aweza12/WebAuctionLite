@@ -33,7 +33,15 @@
             </div>
             <div class="div-box">
                 <label asp-for="ProductId">ProductId</label>
-                <textarea asp-for="ProductId"></textarea>
+
+                <select size="5" asp-for="ProductId">
+                    <option disabled>Выберите товар</option>
+                    @if(ViewBag.Products != null)
+                        foreach (Product p in ViewBag.Products)
+                        {
+                            <option value="@p.Id">@p.Name</option>
+                        }
+                </select>
                 <span asp-validation-for="ProductId"></span>
             </div>
 

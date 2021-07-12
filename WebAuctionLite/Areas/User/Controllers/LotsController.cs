@@ -38,6 +38,10 @@ namespace WebAuctionLite.Areas.User.Controllers
         {
             var entity = id == default ? new Lot() : dataManager.Lots.GetLotById(id);
 
+            var userId = userManager.GetUserId(User);
+
+            ViewBag.Products = dataManager.Products.GetProducts().Where(x => x.ApplicationUserId.ToString() == userId);
+
             return View(entity);
         }
 
@@ -54,10 +58,10 @@ namespace WebAuctionLite.Areas.User.Controllers
             {
                 ModelState.AddModelError("MinBetMove", "Ход аукциона не может быть меньше 5");
             }
-            if (dataManager.Products.GetProducts().Where(x => x.ApplicationUserId.ToString() == id).Where(x => x.Id == model.ProductId) == null)
-            {
-                ModelState.AddModelError("ProductId", "Такого товара не существует в вашем списке");
-            }
+            //if (dataManager.Products.GetProducts().Where(x => x.ApplicationUserId.ToString() == id).Where(x => x.Id == model.ProductId) == null)
+            //{
+            //    ModelState.AddModelError("ProductId", "Такого товара не существует в вашем списке");
+            //}
             else if (dataManager.Lots.GetLotByProductId(model.ProductId) != null)
             {
                 ModelState.AddModelError("ProductId", "Товар уже был выставлен в другом лоте");
@@ -65,14 +69,15 @@ namespace WebAuctionLite.Areas.User.Controllers
 
             if (ModelState.IsValid)
             {
-                if (titleImageFile != null)
+                if (model.Product.TitleImagePath != null)
                 {
-                    model.TitleImagePath = titleImageFile.FileName;
+                    model.TitleImagePath = model.Product.TitleImagePath;
                     using (var stream = new FileStream(Path.Combine(hostingEnvironment.WebRootPath, "images/", titleImageFile.FileName), FileMode.Create))
                     {
                         titleImageFile.CopyTo(stream);
                     }
                 }
+
                 model.DateAdded = DateTime.UtcNow;
                 //model.StartDate = DateTime.UtcNow;
                 model.Product = dataManager.Products.GetProductById(model.ProductId);
