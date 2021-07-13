@@ -1,0 +1,28 @@
+﻿@using WebAuctionLite.Areas.User.Models
+@model AddBidViewModel
+@{
+    string strTitle = "Редактировать лот";
+    ViewBag.Title = strTitle;
+}
+
+<div>
+    <h2>@strTitle</h2>
+    <div>
+        <form asp-area="User" asp-controller="Bids" asp-action="Edit" method="post" enctype="multipart/form-data">
+            @*<input type="text" asp-for="LotId" value="@Model.LotId" />*@
+
+            <div class="div-box">
+                <label asp-for="LotId"></label>
+                <input asp-for="LotId" value="@Model.LotId" />
+                <span asp-validation-for="LotId"></span>
+            </div>
+            <div class="div-box">
+                <label asp-for="BidSum"></label>
+                <input asp-for="BidSum" />
+                <span asp-validation-for="BidSum"></span>
+            </div>
+
+            <input type="submit" value="Добавить ставку" />
+        </form>
+    </div>
+</div>

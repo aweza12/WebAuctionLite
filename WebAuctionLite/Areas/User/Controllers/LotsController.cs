@@ -34,6 +34,11 @@ namespace WebAuctionLite.Areas.User.Controllers
             return View(dataManager.Lots.GetLots().Where(x => x.ApplicationUserId.ToString() == id));
         }
 
+        public IActionResult Show(Guid id)
+        {
+            return View(dataManager.Lots.GetLotById(id));
+        }
+
         public IActionResult Edit(Guid id)
         {
             var entity = id == default ? new Lot() : dataManager.Lots.GetLotById(id);

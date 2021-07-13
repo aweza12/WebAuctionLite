@@ -1,0 +1,36 @@
+﻿@model Lot
+@{
+    string strTitle = "Лоты" + Model.Id;
+    ViewBag.Title = strTitle;
+}
+
+<div>
+    <div>
+        <img src="~/images/@Model.TitleImagePath" alt="" class="left" height="400px" width="400px" />
+
+        <h2>
+            @Model.Title
+        </h2>
+        <h4>
+            Стартовая цена @Model.MinPrice
+        </h4>
+        <h4>
+            Ход ставок @Model.MinBetMove
+        </h4>
+        <p>
+            Лот активен до @Model.EndDate
+        </p>
+        <br />
+        <br />
+        <h4>
+            <a asp-area="User" asp-controller="Bids" asp-action="Edit" asp-route-lotId="@Model.Id">
+                Сделать ставку
+            </a>
+        </h4>
+        <h4>
+            <a asp-area="User" asp-controller="Lots" asp-action="Show" asp-route-id="@Model.Id">
+                Список ставок
+            </a>
+        </h4>
+    </div>
+</div>

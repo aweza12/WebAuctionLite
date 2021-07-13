@@ -10,11 +10,6 @@ namespace WebAuctionLite.Domain.Entities
 {
     public class Bid : BaseEntity
     {
-        public Bid()
-        {
-            BetTime = DateTime.UtcNow;
-            BidStatus = BidStatus.Active;
-        }
 
         [DataType(DataType.Time)]
         public DateTime BetTime { get; set; }

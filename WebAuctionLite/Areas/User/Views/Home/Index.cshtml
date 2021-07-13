@@ -17,15 +17,8 @@
         <h4>
             Ваш баланс: @Model.MoneyAccount
         </h4>
-        @*<script type="text/jscript">
-            function AddMoney() {
-                $.get("/ApplicationUser/AddMoney");
-            };
-        </script>*@
         <a asp-area="User" asp-controller="ApplicationUser" asp-action="AddMoney">Пополнить на 100</a>
-        @*<input type="button" value="Create" onclick="location.href='@Url.Action("Create", "User")'" />*@
-        @*<input type="button" value="Пополнить на 100" onclick="AddMoney()" />*@
-        <a asp-area="User" asp-controller="ApplicationUser" asp-action="Index">Вывести 100</a>
+        <a asp-area="User" asp-controller="ApplicationUser" asp-action="WithdrawMoney">Вывести 100</a>
     </div>
     <div class="div-box">
         <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">

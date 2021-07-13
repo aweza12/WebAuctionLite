@@ -33,8 +33,6 @@ namespace WebAuctionLite.Domain.Entities
         public Product Product { get; set; }
         public ICollection<Bid> Bids { get; set; }
 
-        //public int BuyerId { get; set; }
-        //public Buyer Buyer { get; set; }
         public LotStatus LotStatus { get; set; }
 
         public Guid ApplicationUserId { get; set; }

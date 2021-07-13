@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAuctionLite.Areas.User.Models;
 using WebAuctionLite.Domain;
 using WebAuctionLite.Domain.Entities;
 using WebAuctionLite.Service;
@@ -27,71 +28,64 @@ namespace WebAuctionLite.Areas.User.Controllers
             this.userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Edit(Guid lotId)
         {
-            var id = userManager.GetUserId(User);
-            return View(dataManager.Lots.GetLots().Where(x => x.ApplicationUserId.ToString() == id));
-        }
-
-        public IActionResult Edit(Guid id)
-        {
-            var entity = id == default ? new Lot() : dataManager.Lots.GetLotById(id);
+            var entity = new AddBidViewModel();
+            entity.LotId = lotId;
 
             return View(entity);
         }
 
         [HttpPost]
-        public IActionResult Edit(Lot model, IFormFile titleImageFile)
+        public IActionResult Edit(AddBidViewModel model)
         {
             var id = userManager.GetUserId(User);
+            var lot = dataManager.Lots.GetLotById(model.LotId);
 
-            if (model.EndDate.CompareTo(model.StartDate) < 1)
+            if (model.BidSum < (lot.Bids?.Max(x => x.BidSum) ?? 0) + lot.MinBetMove)
             {
-                ModelState.AddModelError("StartDate", "Дата окончания меньше или равна дате начала аукциона");
+                ModelState.AddModelError("BidSum", "Ставка ниже минимально необходимой (Максимальная предидущая ставка + минимальных ход)");
             }
-            if (model.MinBetMove < 5)
+            if (id == lot.ApplicationUserId.ToString())
             {
-                ModelState.AddModelError("MinBetMove", "Ход аукциона не может быть меньше 5");
+                ModelState.AddModelError("BidSum", "Вы не можете делать ставки на свой лот");
             }
-            if (dataManager.Products.GetProducts().Where(x => x.ApplicationUserId.ToString() == id).Where(x => x.Id == model.ProductId) == null)
+            if (lot.EndDate.CompareTo(DateTime.UtcNow) < 1)
             {
-                ModelState.AddModelError("ProductId", "Такого товара не существует в вашем списке");
+                ModelState.AddModelError("BidSum", "Время для продажи этого лота закончилось");
             }
-            else if (dataManager.Lots.GetLotByProductId(model.ProductId) != null)
+            if (lot.EndDate.CompareTo(DateTime.UtcNow) < 1)
             {
-                ModelState.AddModelError("ProductId", "Товар уже был выставлен в другом лоте");
+                ModelState.AddModelError("BidSum", "Время для продажи этого лота закончилось");
+            }
+            if (lot.LotStatus != Entities.Enums.LotStatus.Active)
+            {
+                ModelState.AddModelError("BidSum", "Сейчас нельзя сделать ставку на этот лот");
             }
 
             if (ModelState.IsValid)
             {
-                if (titleImageFile != null)
-                {
-                    model.TitleImagePath = titleImageFile.FileName;
-                    using (var stream = new FileStream(Path.Combine(hostingEnvironment.WebRootPath, "images/", titleImageFile.FileName), FileMode.Create))
-                    {
-                        titleImageFile.CopyTo(stream);
-                    }
-                }
-                model.DateAdded = DateTime.UtcNow;
-                //model.StartDate = DateTime.UtcNow;
-                model.Product = dataManager.Products.GetProductById(model.ProductId);
-                //model.LotStatus = Entities.Enums.LotStatus.Active;
-
-                model.ApplicationUserId = new Guid(userManager.GetUserId(User));
-                model.ApplicationUser = (ApplicationUser)userManager.FindByIdAsync(userManager.GetUserId(User)).Result;
-
-                dataManager.Lots.SaveLot(model);
-                return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).CutController());
+                var bid = new Bid();
+                bid.BetTime = DateTime.UtcNow;
+                bid.BidSum = model.BidSum;
+                bid.BidStatus = Entities.Enums.BidStatus.Active;
+                bid.BuyerId = id;
+                bid.ApplicationUser = (ApplicationUser)userManager.FindByIdAsync(id).Result;
+                bid.LotId = lot.Id;
+                bid.Lot = lot;
+                //lot.Bids.Add(bid);
+                dataManager.Bids.SaveBid(bid);
+                return RedirectToAction("Show", "Lots", new { id = bid.LotId });
             }
+
             if (!ModelState.IsValid)
             {
-
                 foreach (string s in ModelState.Values.SelectMany(v => v.Errors.Select(b => b.ErrorMessage)))
                 {
                     Console.WriteLine(s);
                 }
             }
-            return View(model);
+            return RedirectToAction("Show", "Lots", new { id = lot.Id });
         }
 
         [HttpPost]

@@ -4,7 +4,7 @@
     ViewBag.Title = strTitle;
 }
 
-<div onload="time()">
+<div>
     <div>
         <h3>Актуальные лоты</h3>
         @*<div class="div-box">
@@ -17,17 +17,19 @@
                 {
                     <div class="product-card" style="height: 250px; border: 2px dashed black; margin-bottom: 20px">
                         @*<li>*@
-                            <a asp-area="" asp-controller="Services" asp-action="Index" asp-route-id="@entity.Id">
+                            <a asp-area="User" asp-controller="Lots" asp-action="Index" asp-route-id="@entity.Id">
                                 <img src="~/images/@entity.TitleImagePath" alt="" class="left" height="200px" width="200px" />
                             </a>
                             <h4>
-                                @entity.Title
+                                <a asp-area="User" asp-controller="Lots" asp-action="Show" asp-route-id="@entity.Id">
+                                    @entity.Title
+                                </a>
                             </h4>
                             <h4>
-                                @entity.MinPrice
+                                Стартовая цена @entity.MinPrice
                             </h4>
                             <h4>
-                                @entity.MinBetMove
+                                Ход ставок @entity.MinBetMove
                             </h4>
                             <p>
                                 Лот активен до @entity.EndDate
