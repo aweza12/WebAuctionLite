@@ -85,7 +85,7 @@ namespace WebAuctionLite.Areas.User.Controllers
                     Console.WriteLine(s);
                 }
             }
-            return RedirectToAction("Show", "Lots", new { id = lot.Id });
+            return View(model);
         }
 
         [HttpPost]

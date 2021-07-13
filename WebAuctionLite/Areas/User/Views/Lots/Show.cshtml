@@ -28,9 +28,12 @@
             </a>
         </h4>
         <h4>
-            <a asp-area="User" asp-controller="Lots" asp-action="Show" asp-route-id="@Model.Id">
-                Список ставок
-            </a>
+            Последние ставки:
         </h4>
+        <div>
+            @foreach (var b in Model.Bids)
+            {
+                <h4>Сумма: @b.BidSum, Время: @b.BetTime</h4>
+            }
+        </div>
     </div>
-</div>

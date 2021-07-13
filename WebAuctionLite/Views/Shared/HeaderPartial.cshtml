@@ -13,11 +13,11 @@
 
                         @if (User.IsInRole("user"))
                         {
-                            <a asp-area="" asp-controller="User">Личный кабинет</a>
+                            <a asp-area="" asp-controller="User" asp-action="Index">Личный кабинет</a>
                         }
                         else if (User.IsInRole("admin"))
                         {
-                            <a asp-area="" asp-controller="Admin">Кабинет администратора</a>
+                            <a asp-area="" asp-controller="Admin" asp-action="Index">Кабинет администратора</a>
                         }
                         else
                         {

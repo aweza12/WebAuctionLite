@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebAuctionLite.Domain;
+using WebAuctionLite.Domain.Entities;
 
 namespace WebAuctionLite.Service.Jobs
 {
@@ -33,6 +34,20 @@ namespace WebAuctionLite.Service.Jobs
                 foreach (var l in dbContext.Lots.Where(x => x.EndDate <= DateTime.UtcNow && x.LotStatus == Entities.Enums.LotStatus.Active))
                 {
                     l.LotStatus = Entities.Enums.LotStatus.Completed;
+                    if(l.Bids != null)
+                    {
+                        Bid maxBid = l.Bids?.First(x => x.BidSum == l.Bids?.Max(x => x.BidSum));
+                        maxBid.BidStatus = Entities.Enums.BidStatus.Win;
+                        maxBid.ApplicationUser.Products.Add(maxBid.Lot.Product);
+                        foreach(var b in l.Bids)
+                        {
+                            if(b.BidStatus != Entities.Enums.BidStatus.Win)
+                            {
+                                b.BidStatus = Entities.Enums.BidStatus.Loss;
+                                b.ApplicationUser.MoneyAccount += b.BidSum;
+                            }
+                        }
+                    }
                 }
 
                 dbContext.SaveChanges();
