@@ -11,7 +11,7 @@
         <form asp-area="User" asp-controller="Bids" asp-action="Edit" method="post" enctype="multipart/form-data">
             @*<input type="text" asp-for="LotId" value="@Model.LotId" />*@
 
-            <div class="div-box">
+            <div class="div-box" hidden>
                 <label asp-for="LotId"></label>
                 <input asp-for="LotId" value="@Model.LotId" />
                 <span asp-validation-for="LotId"></span>

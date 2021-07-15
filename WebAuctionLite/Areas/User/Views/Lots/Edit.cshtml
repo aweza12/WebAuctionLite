@@ -22,11 +22,11 @@
             </div>
             <div class="div-box">
                 <label asp-for="MinBetMove">MinBetMove</label>
-                <textarea asp-for="MinBetMove"></textarea>
+                <input asp-for="MinBetMove" />
                 <span asp-validation-for="MinBetMove"></span>
             </div>
             <div class="div-box">
-                <p>@Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T").Remove(Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T").Length - 3)</p>
+                <p>@Model.StartDate.ToString().Replace(".", "-").Replace(" ", "T").Remove(Model.StartDate.ToString().Replace(".", "-").Replace(" ", "T").Length - 3)</p>
                 <label asp-for="EndDate">EndDate</label>
                 <input type="datetime-local" max="@Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T")" min="@Model.StartDate.ToString().Replace(".", "-").Replace(" ", "T").Remove(Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T").Length - 3)" value="@Model.StartDate.ToString().Replace(".", "-").Replace(" ", "T").Remove(Model.StartDate.AddDays(30).ToString().Replace(".", "-").Replace(" ", "T").Length - 3)" asp-for="EndDate"></input>
                 <span asp-validation-for="EndDate"></span>
@@ -60,13 +60,13 @@
                 <textarea asp-for="Text"></textarea>
                 <span asp-validation-for="Text"></span>
             </div>
-            <div class="div-box">
+            @*<div class="div-box">
                 <label asp-for="TitleImagePath"></label>
                 <input type="file" name="titleImageFile" id="titleImageFile" />
                 <div>
                     <img class="img-block" src="~/images/@Model.TitleImagePath" />
                 </div>
-            </div>
+            </div>*@
             <div class="div-box">
                 <label asp-for="MetaTitle"></label>
                 <input asp-for="MetaTitle" />

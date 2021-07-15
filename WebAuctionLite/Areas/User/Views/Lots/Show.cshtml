@@ -9,7 +9,7 @@
         <img src="~/images/@Model.TitleImagePath" alt="" class="left" height="400px" width="400px" />
 
         <h2>
-            @Model.Title
+            @Model.Product.Name
         </h2>
         <h4>
             Стартовая цена @Model.MinPrice
@@ -17,6 +17,9 @@
         <h4>
             Ход ставок @Model.MinBetMove
         </h4>
+        <p>
+            Описание товара: @Model.Product.Description
+        </p>
         <p>
             Лот активен до @Model.EndDate
         </p>

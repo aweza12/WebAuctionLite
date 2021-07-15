@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,15 @@ namespace WebAuctionLite.Areas.User.Controllers
             this.userManager = userManager;
         }
 
+        public IActionResult Index()
+        {
+            var id = userManager.GetUserId(User);
+            var user = (ApplicationUser)userManager.FindByIdAsync(id).Result;
+            return View(dataManager.ApplicationUsers.GetApplicationUserById(Guid.Parse(id)).Bids);
+            //return View(user.Bids); //.Include(x => x.Lot).ThenInclude(x => x.Product).Include(x => x.ApplicationUser));
+            //return View(dataManager.Bids.GetBids().Include(x => x.Lot).ThenInclude(x => x.Product).Include(x => x.ApplicationUser).Where(x => x.ApplicationUser.Id.ToString() == id));//.Where(x => x.ApplicationUser.Id.ToString() == id));//.Include(x => x.ApplicationUser)
+        }
+
         public IActionResult Edit(Guid lotId)
         {
             var entity = new AddBidViewModel();
@@ -41,22 +51,28 @@ namespace WebAuctionLite.Areas.User.Controllers
         {
             var id = userManager.GetUserId(User);
             var lot = dataManager.Lots.GetLotById(model.LotId);
+            var user = dataManager.ApplicationUsers.GetApplicationUserById(Guid.Parse(id));//(ApplicationUser)userManager.FindByIdAsync(id).Result;
 
-            if (model.BidSum < (lot.Bids?.Max(x => x.BidSum) ?? 0) + lot.MinBetMove)
+            if (lot.Bids.Count == 0 && lot.MinPrice + lot.MinBetMove > model.BidSum)
+            {
+                ModelState.AddModelError("BidSum", "Ставка ниже минимально необходимой (Максимальная предидущая ставка + минимальных ход)");
+            }
+            else if (lot.Bids.Count > 0 && model.BidSum < (lot.Bids.Max(x => x.BidSum)) + lot.MinBetMove)
             {
                 ModelState.AddModelError("BidSum", "Ставка ниже минимально необходимой (Максимальная предидущая ставка + минимальных ход)");
             }
             if (id == lot.ApplicationUserId.ToString())
             {
                 ModelState.AddModelError("BidSum", "Вы не можете делать ставки на свой лот");
+                //var userc = dataManager.ApplicationUsers.GetApplicationUserById(Guid.Parse(id)); //userManager.GetUserAsync(User);
             }
             if (lot.EndDate.CompareTo(DateTime.UtcNow) < 1)
             {
                 ModelState.AddModelError("BidSum", "Время для продажи этого лота закончилось");
             }
-            if (lot.EndDate.CompareTo(DateTime.UtcNow) < 1)
+            if (model.BidSum > user.MoneyAccount + (user.Bids.LastOrDefault(x => x.LotId == lot.Id && x.BidStatus == Entities.Enums.BidStatus.Active) != null ? user.Bids.LastOrDefault(x => x.LotId == lot.Id && x.BidStatus == Entities.Enums.BidStatus.Active).BidSum : 0m))
             {
-                ModelState.AddModelError("BidSum", "Время для продажи этого лота закончилось");
+                ModelState.AddModelError("BidSum", "У вас на счету недостаточно денег");
             }
             if (lot.LotStatus != Entities.Enums.LotStatus.Active)
             {
@@ -65,15 +81,23 @@ namespace WebAuctionLite.Areas.User.Controllers
 
             if (ModelState.IsValid)
             {
+                if (user.Bids?.Where(x => x.Lot == lot).Where(x => x.BidStatus == Entities.Enums.BidStatus.Active) != null)
+                {
+                    foreach (var b in user.Bids.Where(x => x.Lot == lot).Where(x => x.BidStatus == Entities.Enums.BidStatus.Active))
+                    {
+                        b.BidStatus = Entities.Enums.BidStatus.Canceled;
+                        user.MoneyAccount += b.BidSum;
+                    }
+                }
                 var bid = new Bid();
                 bid.BetTime = DateTime.UtcNow;
                 bid.BidSum = model.BidSum;
                 bid.BidStatus = Entities.Enums.BidStatus.Active;
                 bid.BuyerId = id;
-                bid.ApplicationUser = (ApplicationUser)userManager.FindByIdAsync(id).Result;
+                bid.ApplicationUser = user;
                 bid.LotId = lot.Id;
                 bid.Lot = lot;
-                //lot.Bids.Add(bid);
+                user.MoneyAccount -= model.BidSum;
                 dataManager.Bids.SaveBid(bid);
                 return RedirectToAction("Show", "Lots", new { id = bid.LotId });
             }

@@ -63,10 +63,6 @@ namespace WebAuctionLite.Areas.User.Controllers
             {
                 ModelState.AddModelError("MinBetMove", "Ход аукциона не может быть меньше 5");
             }
-            //if (dataManager.Products.GetProducts().Where(x => x.ApplicationUserId.ToString() == id).Where(x => x.Id == model.ProductId) == null)
-            //{
-            //    ModelState.AddModelError("ProductId", "Такого товара не существует в вашем списке");
-            //}
             else if (dataManager.Lots.GetLotByProductId(model.ProductId) != null)
             {
                 ModelState.AddModelError("ProductId", "Товар уже был выставлен в другом лоте");
@@ -81,10 +77,6 @@ namespace WebAuctionLite.Areas.User.Controllers
                 if (model.Product.TitleImagePath != null)
                 {
                     model.TitleImagePath = model.Product.TitleImagePath;
-                    using (var stream = new FileStream(Path.Combine(hostingEnvironment.WebRootPath, "images/", titleImageFile.FileName), FileMode.Create))
-                    {
-                        titleImageFile.CopyTo(stream);
-                    }
                 }
 
                 //model.LotStatus = Entities.Enums.LotStatus.Active;

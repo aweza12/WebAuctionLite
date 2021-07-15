@@ -1,0 +1,74 @@
+﻿@model ICollection<Bid>
+@{
+    string strTitle = "Ставки пользователя";
+    ViewBag.Title = strTitle;
+}
+
+<div>
+    <div>
+        <h3>Ваши ставки</h3>
+        @if (Model.Any())
+        {
+            <div>
+                <h3>Активные ставки</h3>
+                @foreach (Bid entity in Model.Where(x => x.BidStatus == WebAuctionLite.Entities.Enums.BidStatus.Active))
+                {
+                    <div>
+                        <a asp-area="User" asp-controller="Lots" asp-action="Show" asp-route-id="@entity.Lot.Id">
+                            @entity.Lot.Product.Name
+                        </a>
+                        |
+                        <p>
+                            @entity.BidSum
+                        </p>
+                        |
+                        <p>
+                            @entity.Lot.EndDate
+                        </p>
+                    </div>
+                }
+            </div>
+            <div>
+                <h3>Выигранные ставки</h3>
+                @foreach (Bid entity in Model.Where(x => x.BidStatus == WebAuctionLite.Entities.Enums.BidStatus.Win))
+                {
+                    <div>
+                        <p>
+                            <a asp-area="User" asp-controller="Lots" asp-action="Show" asp-route-id="@entity.LotId">
+                                @entity.Lot.Product.Name
+                            </a>
+                            |
+
+                            @entity.BidSum
+                            |
+                            @entity.Lot.EndDate
+                        </p>
+                    </div>
+                }
+            </div>
+            <div>
+                <h3>Проигранные ставки</h3>
+                @foreach (Bid entity in Model.Where(x => x.BidStatus == WebAuctionLite.Entities.Enums.BidStatus.Loss))
+                {
+                    <div>
+                        <a asp-area="User" asp-controller="Lots" asp-action="Show" asp-route-id="@entity.Lot.Id">
+                            @entity.Lot.Product.Name
+                        </a>
+                        |
+                        <p>
+                            @entity.BidSum
+                        </p>
+                        |
+                        <p>
+                            @entity.Lot.EndDate
+                        </p>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <h3>У вас пока нет ставок</h3>
+        }
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -31,15 +32,17 @@ namespace WebAuctionLite.Service.Jobs
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-                foreach (var l in dbContext.Lots.Where(x => x.EndDate <= DateTime.UtcNow && x.LotStatus == Entities.Enums.LotStatus.Active))
+                foreach (var l in dbContext.Lots.Where(x => x.EndDate <= DateTime.UtcNow && x.LotStatus == Entities.Enums.LotStatus.Active).Include(x => x.Bids).ThenInclude(x => x.ApplicationUser).ThenInclude(x => x.Products).Include(x => x.Product).Include(x => x.ApplicationUser))
                 {
                     l.LotStatus = Entities.Enums.LotStatus.Completed;
-                    if(l.Bids != null)
+                    if(l.Bids != null && l.Bids.Count != 0)
                     {
-                        Bid maxBid = l.Bids?.First(x => x.BidSum == l.Bids?.Max(x => x.BidSum));
+                        Bid maxBid = l.Bids.First(x => x.BidSum == l.Bids.Max(x => x.BidSum));
                         maxBid.BidStatus = Entities.Enums.BidStatus.Win;
                         maxBid.ApplicationUser.Products.Add(maxBid.Lot.Product);
-                        foreach(var b in l.Bids)
+                        maxBid.Lot.Product.ApplicationUserId = Guid.Parse(maxBid.BuyerId);
+                        l.ApplicationUser.MoneyAccount += maxBid.BidSum;
+                        foreach (var b in l.Bids)
                         {
                             if(b.BidStatus != Entities.Enums.BidStatus.Win)
                             {

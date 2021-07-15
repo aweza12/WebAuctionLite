@@ -20,12 +20,12 @@ namespace WebAuctionLite.Domain.Repositories.EntityFramework
 
         public IQueryable<Lot> GetLots()
         {
-            return context.Lots;
+            return context.Lots.Include(x => x.Product); //.ThenInclude(x => x.Name);
         }
 
         public Lot GetLotById(Guid id)
         {
-            return context.Lots.FirstOrDefault(x => x.Id == id);
+            return context.Lots.Include(x => x.Product).Include(x => x.Bids).FirstOrDefault(x => x.Id == id);
         }
 
         public Lot GetLotByProductId(Guid id)

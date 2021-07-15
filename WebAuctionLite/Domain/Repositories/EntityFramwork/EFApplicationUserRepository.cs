@@ -24,7 +24,7 @@ namespace WebAuctionLite.Domain.Repositories.EntityFramework
 
         public ApplicationUser GetApplicationUserById(Guid id)
         {
-            return context.ApplicationUsers.FirstOrDefault(x => x.Id == id);
+            return context.ApplicationUsers.Include(x => x.Bids).ThenInclude(x => x.Lot).ThenInclude(x => x.Product).FirstOrDefault(x => x.Id == id);
         }
 
         public ApplicationUser GetApplicationUserByName(string firstName)

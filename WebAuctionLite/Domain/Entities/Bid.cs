@@ -10,6 +10,10 @@ namespace WebAuctionLite.Domain.Entities
 {
     public class Bid : BaseEntity
     {
+        public Bid()
+        {
+            BidSum = 0;
+        }
 
         [DataType(DataType.Time)]
         public DateTime BetTime { get; set; }
