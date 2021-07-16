@@ -58,12 +58,10 @@ namespace WebAuctionLite.Controllers
             if (ModelState.IsValid)
             {
                 ApplicationUser user = new ApplicationUser { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName, Email = model.Email, MoneyAccount = 0 };
-                // добавляем пользователя
                 var result = await userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    // установка куки
                     await signInManager.SignInAsync(user, false);
                     await userManager.AddToRoleAsync(user, "user");
                     return RedirectToAction("Index", "Home");

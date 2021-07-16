@@ -34,8 +34,6 @@ namespace WebAuctionLite.Areas.User.Controllers
             var id = userManager.GetUserId(User);
             var user = (ApplicationUser)userManager.FindByIdAsync(id).Result;
             return View(dataManager.ApplicationUsers.GetApplicationUserById(Guid.Parse(id)).Bids);
-            //return View(user.Bids); //.Include(x => x.Lot).ThenInclude(x => x.Product).Include(x => x.ApplicationUser));
-            //return View(dataManager.Bids.GetBids().Include(x => x.Lot).ThenInclude(x => x.Product).Include(x => x.ApplicationUser).Where(x => x.ApplicationUser.Id.ToString() == id));//.Where(x => x.ApplicationUser.Id.ToString() == id));//.Include(x => x.ApplicationUser)
         }
 
         public IActionResult Edit(Guid lotId)
@@ -51,7 +49,7 @@ namespace WebAuctionLite.Areas.User.Controllers
         {
             var id = userManager.GetUserId(User);
             var lot = dataManager.Lots.GetLotById(model.LotId);
-            var user = dataManager.ApplicationUsers.GetApplicationUserById(Guid.Parse(id));//(ApplicationUser)userManager.FindByIdAsync(id).Result;
+            var user = dataManager.ApplicationUsers.GetApplicationUserById(Guid.Parse(id));
 
             if (lot.Bids.Count == 0 && lot.MinPrice + lot.MinBetMove > model.BidSum)
             {
@@ -64,7 +62,6 @@ namespace WebAuctionLite.Areas.User.Controllers
             if (id == lot.ApplicationUserId.ToString())
             {
                 ModelState.AddModelError("BidSum", "Вы не можете делать ставки на свой лот");
-                //var userc = dataManager.ApplicationUsers.GetApplicationUserById(Guid.Parse(id)); //userManager.GetUserAsync(User);
             }
             if (lot.EndDate.CompareTo(DateTime.UtcNow) < 1)
             {

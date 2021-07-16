@@ -71,15 +71,12 @@ namespace WebAuctionLite.Areas.User.Controllers
             if (ModelState.IsValid)
             {
                 model.DateAdded = DateTime.UtcNow;
-                //model.StartDate = DateTime.UtcNow;
                 model.Product = dataManager.Products.GetProductById(model.ProductId);
 
                 if (model.Product.TitleImagePath != null)
                 {
                     model.TitleImagePath = model.Product.TitleImagePath;
                 }
-
-                //model.LotStatus = Entities.Enums.LotStatus.Active;
 
                 model.ApplicationUserId = new Guid(userManager.GetUserId(User));
                 model.ApplicationUser = (ApplicationUser)userManager.FindByIdAsync(userManager.GetUserId(User)).Result;

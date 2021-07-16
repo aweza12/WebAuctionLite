@@ -22,7 +22,6 @@ namespace WebAuctionLite.Controllers
         {
             int pageSize = 1;
             IQueryable<Lot> source = dataManager.Lots.GetLots().Where(x => x.LotStatus == Entities.Enums.LotStatus.Active).OrderBy(x => x.StartDate);
-            //return View(dataManager.Lots.GetLots().Where(x => x.LotStatus == Entities.Enums.LotStatus.Active).OrderBy(x => x.StartDate).ToPagedList(pageNumber, pageSize));
             var count = await source.CountAsync();
             var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 

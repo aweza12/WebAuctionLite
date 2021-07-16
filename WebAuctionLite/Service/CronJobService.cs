@@ -35,14 +35,14 @@ public abstract class CronJobService : IHostedService, IDisposable
         if (next.HasValue)
         {
             var delay = next.Value - DateTimeOffset.Now;
-            if (delay.TotalMilliseconds <= 0)   // prevent non-positive values from being passed into Timer
+            if (delay.TotalMilliseconds <= 0)
             {
                 await ScheduleJob(cancellationToken);
             }
             _timer = new System.Timers.Timer(delay.TotalMilliseconds);
             _timer.Elapsed += async (sender, args) =>
             {
-                _timer.Dispose();  // reset and dispose timer
+                _timer.Dispose();
                 _timer = null;
 
                 if (!cancellationToken.IsCancellationRequested)
@@ -52,7 +52,7 @@ public abstract class CronJobService : IHostedService, IDisposable
 
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    await ScheduleJob(cancellationToken);    // reschedule next
+                    await ScheduleJob(cancellationToken);
                 }
             };
             _timer.Start();
@@ -63,7 +63,7 @@ public abstract class CronJobService : IHostedService, IDisposable
     public virtual async Task DoWork(CancellationToken cancellationToken)
     {
 
-        await Task.Delay(5000, cancellationToken);  // do the work
+        await Task.Delay(5000, cancellationToken);
     }
 
     public virtual async Task StopAsync(CancellationToken cancellationToken)

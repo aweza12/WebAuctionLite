@@ -1,9 +1,6 @@
-﻿@*@model PagedList.IPagedList<WebAuctionLite.Domain.Entities.Lot>
-    @using PagedList.Mvc;*@
-@using WebAuctionLite.Models
+﻿@using WebAuctionLite.Models
 @model IndexViewModel
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
-@*@model IQueryable<Lot>*@
 @{
     string strTitle = "Главная";
     ViewBag.Title = strTitle;
@@ -12,9 +9,6 @@
 <div>
     <div>
         <h3>Актуальные лоты</h3>
-        @*<div class="div-box">
-                <a asp-area="User" asp-controller="Lots" asp-action="Edit" asp-route-id="">Добавить новый лот</a>
-            </div>*@
         @if (Model != null)
         {
             <div>
@@ -65,5 +59,3 @@
         <i class="glyphicon glyphicon-chevron-right"></i>
     </a>
 }
-@*Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))*@
