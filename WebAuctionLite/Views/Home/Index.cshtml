@@ -1,4 +1,9 @@
-﻿@model IQueryable<Lot>
+﻿@*@model PagedList.IPagedList<WebAuctionLite.Domain.Entities.Lot>
+    @using PagedList.Mvc;*@
+@using WebAuctionLite.Models
+@model IndexViewModel
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*@model IQueryable<Lot>*@
 @{
     string strTitle = "Главная";
     ViewBag.Title = strTitle;
@@ -10,34 +15,55 @@
         @*<div class="div-box">
                 <a asp-area="User" asp-controller="Lots" asp-action="Edit" asp-route-id="">Добавить новый лот</a>
             </div>*@
-        @if (Model.Any())
+        @if (Model != null)
         {
             <div>
-                @foreach (Lot entity in Model)
+                @foreach (Lot entity in Model.Lots)
                 {
                     <div class="product-card" style="height: 250px; border: 2px dashed black; margin-bottom: 20px">
                         @*<li>*@
-                            <a asp-area="User" asp-controller="Lots" asp-action="Index" asp-route-id="@entity.Id">
-                                <img src="~/images/@entity.TitleImagePath" alt="" class="left" height="200px" width="200px" />
+                        <a asp-area="User" asp-controller="Lots" asp-action="Index" asp-route-id="@entity.Id">
+                            <img src="~/images/@entity.TitleImagePath" alt="" class="left" height="200px" width="200px" />
+                        </a>
+                        <h4>
+                            <a asp-area="User" asp-controller="Lots" asp-action="Show" asp-route-id="@entity.Id">
+                                @entity.Product.Name
                             </a>
-                            <h4>
-                                <a asp-area="User" asp-controller="Lots" asp-action="Show" asp-route-id="@entity.Id">
-                                    @entity.Product.Name
-                                </a>
-                            </h4>
-                            <h4>
-                                Стартовая цена @entity.MinPrice
-                            </h4>
-                            <h4>
-                                Ход ставок @entity.MinBetMove
-                            </h4>
-                            <p>
-                                Лот активен до @entity.EndDate
-                            </p>
+                        </h4>
+                        <h4>
+                            Стартовая цена @entity.MinPrice
+                        </h4>
+                        <h4>
+                            Ход ставок @entity.MinBetMove
+                        </h4>
+                        <p>
+                            Лот активен до @entity.EndDate
+                        </p>
                         @*</li>*@
                     </div>
-                 }
+                }
             </div>
         }
     </div>
 </div>
+
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
+@*Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))*@

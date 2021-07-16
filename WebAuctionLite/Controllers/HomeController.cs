@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PagedList;
 using System.Linq;
+using System.Threading.Tasks;
 using WebAuctionLite.Domain;
+using WebAuctionLite.Domain.Entities;
+using WebAuctionLite.Models;
 
 namespace WebAuctionLite.Controllers
 {
@@ -13,9 +18,22 @@ namespace WebAuctionLite.Controllers
             this.dataManager = dataManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View(dataManager.Lots.GetLots().Where(x => x.LotStatus == Entities.Enums.LotStatus.Active).OrderBy(x => x.StartDate));
+            int pageSize = 1;
+            IQueryable<Lot> source = dataManager.Lots.GetLots().Where(x => x.LotStatus == Entities.Enums.LotStatus.Active).OrderBy(x => x.StartDate);
+            //return View(dataManager.Lots.GetLots().Where(x => x.LotStatus == Entities.Enums.LotStatus.Active).OrderBy(x => x.StartDate).ToPagedList(pageNumber, pageSize));
+            var count = await source.CountAsync();
+            var items = await source.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            IndexViewModel viewModel = new IndexViewModel
+            {
+                PageViewModel = pageViewModel,
+                Lots = items
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Contacts()
